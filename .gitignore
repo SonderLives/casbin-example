@@ -22,15 +22,18 @@ dist-ssr/
 .env.*
 !.env.example
 
+# ===== Editor / local tooling =====
+.zcodeignore
+.idea/
+.vscode/
+*.swp
+*.swo
+
 # ===== Logs & temp =====
 *.log
 logs/
 tmp/
 coverage/
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # ===== OS =====
 .DS_Store
