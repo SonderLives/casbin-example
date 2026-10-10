@@ -1,0 +1,35 @@
+# ============================================================
+# 策略数据（CSV 文件适配器）
+#   p, 主体, 域, 资源, 操作   —— 授权规则：谁在哪个域对什么资源能做什么
+#   g, 用户, 角色, 域        —— 角色分配：谁在哪个域是什么角色
+#
+# 直接改这个文件重启（或调 /api/policies 接口），权限立即生效。
+# 切到 sqlite 模式时本文件不参与运行，但里面的规则会作为种子写入数据库。
+# ============================================================
+
+# ---- ABAC 占位规则（保留主体 owner，请勿删除）----
+# 这两行承载 model.conf 匹配器里的「属主放行」分支：请求者是资源属主时命中。
+# 「owner」是保留主体名，不要把它当作普通角色/主体使用（管理接口已做校验）。
+p, owner, tenant-a, *, *
+p, owner, tenant-b, *, *
+
+# ---- 角色的权限（tenant-a）----
+p, admin, tenant-a, docs, *
+p, editor, tenant-a, docs, read
+p, editor, tenant-a, docs, write
+p, viewer, tenant-a, docs, read
+p, admin, tenant-a, policies, read
+p, admin, tenant-a, policies, write
+
+# ---- 角色的权限（tenant-b）----
+p, admin, tenant-b, docs, *
+p, viewer, tenant-b, docs, read
+p, admin, tenant-b, policies, read
+p, admin, tenant-b, policies, write
+
+# ---- 角色分配（带域）----
+g, alice, admin, tenant-a
+g, alice, viewer, tenant-b
+g, bob, editor, tenant-a
+g, charlie, viewer, tenant-a
+g, dave, admin, tenant-b
